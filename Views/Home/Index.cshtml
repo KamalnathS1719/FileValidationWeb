@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script src="Scripts/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function ()
+        {
+            $("#But1").on("click", function ()
+            {
+                var data = new FormData();
+                var filesupload = $("#File1").get(0).files;
+                if (filesupload.length > 0)
+                {
+                    data.append("Uploadingfiles", filesupload[0]);
+                }
+                $.ajax(
+                    {
+                        type: "POST",
+                        url: "https://localhost:44360/api/FileUploadValidation",
+                        contentType: false,
+                        processData: false,
+                        data: data
+                    }).then(function ()
+                    {
+                        $("#span1").text("File Upload Successfully...")
+                        $("#span1").css({ 'color': 'green' });
+                        $("#File1").val("");
+                    });
+            });
+        });
+        function validatetypefile(imgfile)
+        {
+            var ext = imgfile.split(".");
+            ext = ext[ext.length - 1].toLowerCase();
+            var imgtype = ["jpg", "gif", "zip"];
+            if (imgtype.lastIndexOf(ext) == -1)
+            {
+                $("#span1").text("Only jpg, gif are allowed...")
+                $("#span1").css({ 'color': 'red' });
+                $("#File1").val("");
+            }
+        }
+    </script>
+    <title></title>
+</head>
+<body>
+    <center>
+        <h1>File upload validation</h1>
+        <h2>Web from</h2>
+        <hr />
+        <table border="1">
+            <tr>
+                <td> Select File's</td>
+                <td><input id="File1" type="file" accept="image/*" onchange="validatetypefile(this.value)" /></td>
+            </tr>
+            <tr>
+                <td><input type="button" id="But1" value="Upload Files" /></td>
+            </tr>
+        </table>
+        <span id="span1"></span>
+    </center>
+</body>
+</html>
